@@ -29,7 +29,9 @@ function disconnect() {
 }
 
 function sendDrawing(drawing) {
-    stompClient.send("/app/draw", {}, JSON.stringify(drawing));
+    if (stompClient) {
+        stompClient.send("/app/draw", {}, JSON.stringify(drawing));
+    }
 }
 
 function showDrawing(drawing) {
@@ -83,19 +85,39 @@ $(function () {
         sendDrawing(drawing);
     });
 
-    let start;
+    let mousedown, start;
 
     canvas.addEventListener("mousedown", function (event) {
+        mousedown = true;
         start = getMousePosition(event);
     });
 
+    canvas.addEventListener("mousemove", function (event) {
+        if (!mousedown) {
+            return;
+        }
+        let current = getMousePosition(event);
+        const drawing = {
+            type: 'line',
+            start: [start.x, start.y],
+            end: [current.x, current.y],
+            color: myColor,
+            source: "mouseup"
+        };
+        showDrawing(drawing);
+        sendDrawing(drawing);
+        start = current;
+    });
+
     canvas.addEventListener("mouseup", function (event) {
+        mousedown = false;
         let end = getMousePosition(event);
         const drawing = {
             type: 'line',
             start: [start.x, start.y],
             end: [end.x, end.y],
-            color: myColor
+            color: myColor,
+            source: "mouseup"
         };
         showDrawing(drawing);
         sendDrawing(drawing);
