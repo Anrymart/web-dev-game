@@ -1,8 +1,6 @@
 let stompClient;
 let canvas, context;
 
-const myColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
@@ -68,6 +66,9 @@ $(function () {
         disconnect();
     });
 
+    let color = $("#color");
+    color.val("#" + Math.floor(Math.random() * 16777215).toString(16));
+
     canvas = document.getElementById("canvas");
     context = canvas.getContext("2d");
 
@@ -79,7 +80,7 @@ $(function () {
             x: rect.x,
             y: rect.y,
             radius: radius,
-            color: myColor
+            color: color.val()
         };
         showDrawing(drawing);
         sendDrawing(drawing);
@@ -101,7 +102,7 @@ $(function () {
             type: 'line',
             start: [start.x, start.y],
             end: [current.x, current.y],
-            color: myColor,
+            color: color.val(),
             source: "mouseup"
         };
         showDrawing(drawing);
@@ -116,7 +117,7 @@ $(function () {
             type: 'line',
             start: [start.x, start.y],
             end: [end.x, end.y],
-            color: myColor,
+            color: color.val(),
             source: "mouseup"
         };
         showDrawing(drawing);
