@@ -82,7 +82,7 @@ $(function () {
             radius: radius,
             color: color.val()
         };
-        showDrawing(drawing);
+        // showDrawing(drawing);
         sendDrawing(drawing);
     });
 
@@ -105,7 +105,7 @@ $(function () {
             color: color.val(),
             source: "mouseup"
         };
-        showDrawing(drawing);
+        // showDrawing(drawing);
         sendDrawing(drawing);
         start = current;
     });
@@ -120,7 +120,7 @@ $(function () {
             color: color.val(),
             source: "mouseup"
         };
-        showDrawing(drawing);
+        // showDrawing(drawing);
         sendDrawing(drawing);
     });
 
