@@ -33,11 +33,26 @@ function sendDrawing(drawing) {
 }
 
 function showDrawing(drawing) {
-    context.beginPath();
-    context.strokeStyle = drawing.color;
-    context.arc(drawing.x, drawing.y, drawing.radius, 0, Math.PI * 2, true);
-    context.stroke();
-    context.closePath();
+    switch (drawing.type) {
+        case "circle":
+            context.beginPath();
+            context.strokeStyle = drawing.color;
+            context.arc(drawing.x, drawing.y, drawing.radius, 0, Math.PI * 2, true);
+            context.stroke();
+            context.closePath();
+            break;
+        case "line":
+            context.beginPath();
+            context.strokeStyle = drawing.color;
+            context.moveTo(drawing.start[0], drawing.start[1]);
+            context.lineTo(drawing.end[0], drawing.end[1]);
+            context.stroke();
+            context.closePath();
+            break;
+        default:
+            console.log(`Unknown drawing type ${drawing.type}`);
+            break;
+    }
 }
 
 $(function () {
@@ -53,10 +68,12 @@ $(function () {
 
     canvas = document.getElementById("canvas");
     context = canvas.getContext("2d");
-    canvas.addEventListener("click", function (event) {
-        const rect = getMousePosition(canvas, event);
+
+    canvas.addEventListener("dblclick", function (event) {
+        const rect = getMousePosition(event);
         const radius = Math.random() * 10;
         const drawing = {
+            type: 'circle',
             x: rect.x,
             y: rect.y,
             radius: radius,
@@ -64,10 +81,29 @@ $(function () {
         };
         showDrawing(drawing);
         sendDrawing(drawing);
-    })
+    });
+
+    let start;
+
+    canvas.addEventListener("mousedown", function (event) {
+        start = getMousePosition(event);
+    });
+
+    canvas.addEventListener("mouseup", function (event) {
+        let end = getMousePosition(event);
+        const drawing = {
+            type: 'line',
+            start: [start.x, start.y],
+            end: [end.x, end.y],
+            color: myColor
+        };
+        showDrawing(drawing);
+        sendDrawing(drawing);
+    });
+
 });
 
-function getMousePosition(canvas, event) {
+function getMousePosition(event) {
     const rect = canvas.getBoundingClientRect();
     return {
         x: event.clientX - rect.left,
