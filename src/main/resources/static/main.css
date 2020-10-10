@@ -12,3 +12,14 @@ body {
     -moz-border-radius: 5px;
     border-radius: 5px;
 }
+
+.cursor {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    border: 2px solid #ff0000;
+    opacity: 0.5;
+    left: -100px;
+    top: -100px;
+}

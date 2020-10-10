@@ -1,5 +1,6 @@
 let stompClient;
 let canvas, context;
+const clientId = Math.round((Math.random() * 1e10));
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -13,7 +14,7 @@ function connect() {
         setConnected(true);
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/drawings', function (drawing) {
-            showDrawing(JSON.parse(drawing.body));
+            handleEvent(JSON.parse(drawing.body));
         });
     });
 }
@@ -32,25 +33,36 @@ function sendDrawing(drawing) {
     }
 }
 
-function showDrawing(drawing) {
-    switch (drawing.type) {
+function handleEvent(event) {
+    switch (event.type) {
         case "circle":
             context.beginPath();
-            context.strokeStyle = drawing.color;
-            context.arc(drawing.x, drawing.y, drawing.radius, 0, Math.PI * 2, true);
+            context.strokeStyle = event.color;
+            context.arc(event.x, event.y, event.radius, 0, Math.PI * 2, true);
             context.stroke();
             context.closePath();
             break;
         case "line":
             context.beginPath();
-            context.strokeStyle = drawing.color;
-            context.moveTo(drawing.start[0], drawing.start[1]);
-            context.lineTo(drawing.end[0], drawing.end[1]);
+            context.strokeStyle = event.color;
+            context.moveTo(event.start[0], event.start[1]);
+            context.lineTo(event.end[0], event.end[1]);
             context.stroke();
             context.closePath();
             break;
+        case "cursor":
+            if (event.clientId === clientId) {
+                break;
+            }
+            let cursor = $(`#cursor-${event.clientId}`);
+            if (!cursor.length) {
+                let cursor = $(`<div class="cursor" id="cursor-${event.clientId}"></div>`);
+                $("body").append(cursor);
+            }
+            cursor.css({top: event.top, left: event.left});
+            break;
         default:
-            console.log(`Unknown drawing type ${drawing.type}`);
+            console.log(`Unknown drawing type ${event.type}`);
             break;
     }
 }
@@ -82,7 +94,7 @@ $(function () {
             radius: radius,
             color: color.val()
         };
-        // showDrawing(drawing);
+        handleEvent(drawing);
         sendDrawing(drawing);
     });
 
@@ -105,7 +117,7 @@ $(function () {
             color: color.val(),
             source: "mouseup"
         };
-        // showDrawing(drawing);
+        handleEvent(drawing);
         sendDrawing(drawing);
         start = current;
     });
@@ -120,10 +132,20 @@ $(function () {
             color: color.val(),
             source: "mouseup"
         };
-        // showDrawing(drawing);
+        handleEvent(drawing);
         sendDrawing(drawing);
     });
 
+    document.addEventListener("mousemove", function (event) {
+        const cursorEvent = {
+            type: 'cursor',
+            clientId: clientId,
+            top: event.clientY,
+            left: event.clientX
+        };
+        handleEvent(cursorEvent);
+        sendDrawing(cursorEvent);
+    });
 });
 
 function getMousePosition(event) {
