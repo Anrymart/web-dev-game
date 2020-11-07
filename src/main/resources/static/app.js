@@ -17,6 +17,15 @@ function connect() {
             handleEvent(JSON.parse(drawing.body));
         });
     });
+    loadHistory();
+}
+
+function loadHistory() {
+    $.get("/messages?types=line,circle").then(data => {
+        data.forEach(event => {
+            handleEvent(event);
+        })
+    });
 }
 
 function disconnect() {
@@ -34,32 +43,33 @@ function sendDrawing(drawing) {
 }
 
 function handleEvent(event) {
+    const features = event.features;
     switch (event.type) {
         case "circle":
             context.beginPath();
-            context.strokeStyle = event.color;
-            context.arc(event.x, event.y, event.radius, 0, Math.PI * 2, true);
+            context.strokeStyle = features.color;
+            context.arc(features.x, features.y, features.radius, 0, Math.PI * 2, true);
             context.stroke();
             context.closePath();
             break;
         case "line":
             context.beginPath();
-            context.strokeStyle = event.color;
-            context.moveTo(event.start[0], event.start[1]);
-            context.lineTo(event.end[0], event.end[1]);
+            context.strokeStyle = features.color;
+            context.moveTo(features.start[0], features.start[1]);
+            context.lineTo(features.end[0], features.end[1]);
             context.stroke();
             context.closePath();
             break;
         case "cursor":
-            if (event.clientId === clientId) {
+            if (features.clientId === clientId) {
                 break;
             }
-            let cursor = $(`#cursor-${event.clientId}`);
+            let cursor = $(`#cursor-${features.clientId}`);
             if (!cursor.length) {
-                let cursor = $(`<div class="cursor" id="cursor-${event.clientId}"></div>`);
+                let cursor = $(`<div class="cursor" id="cursor-${features.clientId}"></div>`);
                 $("body").append(cursor);
             }
-            cursor.css({top: event.top, left: event.left});
+            cursor.css({top: features.top, left: features.left});
             break;
         default:
             console.log(`Unknown drawing type ${event.type}`);
@@ -89,10 +99,12 @@ $(function () {
         const radius = Math.random() * 10;
         const drawing = {
             type: 'circle',
-            x: rect.x,
-            y: rect.y,
-            radius: radius,
-            color: color.val()
+            features: {
+                x: rect.x,
+                y: rect.y,
+                radius: radius,
+                color: color.val()
+            }
         };
         handleEvent(drawing);
         sendDrawing(drawing);
@@ -112,10 +124,12 @@ $(function () {
         let current = getMousePosition(event);
         const drawing = {
             type: 'line',
-            start: [start.x, start.y],
-            end: [current.x, current.y],
-            color: color.val(),
-            source: "mouseup"
+            features: {
+                start: [start.x, start.y],
+                end: [current.x, current.y],
+                color: color.val(),
+                source: "mouseup"
+            }
         };
         handleEvent(drawing);
         sendDrawing(drawing);
@@ -127,10 +141,12 @@ $(function () {
         let end = getMousePosition(event);
         const drawing = {
             type: 'line',
-            start: [start.x, start.y],
-            end: [end.x, end.y],
-            color: color.val(),
-            source: "mouseup"
+            features: {
+                start: [start.x, start.y],
+                end: [end.x, end.y],
+                color: color.val(),
+                source: "mouseup"
+            }
         };
         handleEvent(drawing);
         sendDrawing(drawing);
@@ -139,9 +155,11 @@ $(function () {
     document.addEventListener("mousemove", function (event) {
         const cursorEvent = {
             type: 'cursor',
-            clientId: clientId,
-            top: event.clientY,
-            left: event.clientX
+            features: {
+                clientId: clientId,
+                top: event.clientY,
+                left: event.clientX
+            }
         };
         handleEvent(cursorEvent);
         sendDrawing(cursorEvent);
