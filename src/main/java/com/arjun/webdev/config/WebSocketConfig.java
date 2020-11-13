@@ -1,4 +1,4 @@
-package com.anrymart.webdev.config;
+package com.arjun.webdev.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

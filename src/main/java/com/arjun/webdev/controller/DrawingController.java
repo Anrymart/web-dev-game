@@ -1,6 +1,6 @@
-package com.anrymart.webdev.controller;
+package com.arjun.webdev.controller;
 
-import com.anrymart.webdev.model.Message;
+import com.arjun.webdev.model.Message;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
