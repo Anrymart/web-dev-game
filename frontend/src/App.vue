@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <b-navbar style="width: 100%" type="dark" variant="dark">
-      <b-navbar-brand id="nav-brand" href="#">Kotlin+Spring+Vue</b-navbar-brand>
+      <b-navbar-brand id="nav-brand" href="#">Scribbles game</b-navbar-brand>
       <router-link to="/"><img height="30px" src="./assets/img/kotlin-logo.png" alt="Kotlin+Spring+Vue"/></router-link>
       <router-link to="/"><img height="30px" src="./assets/img/spring-boot-logo.png" alt="Kotlin+Spring+Vue"/></router-link>
       <router-link to="/"><img height="30px" src="./assets/img/vuejs-logo.png" alt="Kotlin+Spring+Vue"/></router-link>

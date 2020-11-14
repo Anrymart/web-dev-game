@@ -1,5 +1,5 @@
 <template>
-    <div div="signup">
+    <div id="signup">
         <div class="login-form">
         <b-card
               title="Register"
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import {AXIOS} from './http-common'
+import {AXIOS} from '@/common/http-client'
 import VueRecaptcha from 'vue-recaptcha'
 
 export default {

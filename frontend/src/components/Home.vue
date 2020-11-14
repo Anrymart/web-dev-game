@@ -1,5 +1,5 @@
 <template>
-    <div div="home">
+    <div id="home">
         <b-jumbotron>
         <template slot="header">Kotlin + Spring Boot + Vue.js</template>
 

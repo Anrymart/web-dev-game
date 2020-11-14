@@ -18,7 +18,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<rest-assured.version>3.3.0</rest-assured.version>
-		<start-class>com.kotlinspringvue.backend.BackendApplicationKt</start-class>
+		<start-class>com.anrymart.webdev.BackendApplicationKt</start-class>
 		<postgresql.version>42.2.5</postgresql.version>
 	</properties>
 
@@ -142,7 +142,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.kotlinspringvue.backend.BackendApplicationKt</mainClass>
+					<mainClass>com.anrymart.webdev.BackendApplicationKt</mainClass>
 				</configuration>
 			</plugin>
 			<plugin>

@@ -1,11 +1,11 @@
 <template>
-    <div div="adminpage">
+    <div id="adminpage">
         <h2>{{ pageContent }}</h2>
     </div>
 </template>
 
 <script>
-import {AXIOS} from './http-common'
+import {AXIOS} from '@/common/http-client'
 
 export default {
     name: 'AdminPage',
