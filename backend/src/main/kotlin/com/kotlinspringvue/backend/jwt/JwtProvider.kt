@@ -1,10 +1,8 @@
 package com.kotlinspringvue.backend.jwt
 
-import com.kotlinspringvue.backend.repository.UserRepository
 import io.jsonwebtoken.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.util.*
@@ -18,13 +16,13 @@ class JwtProvider {
     lateinit var jwtSecret: String
 
     @Value("\${assm.app.jwtExpiration}")
-    var jwtExpiration:Int?=0
+    var jwtExpiration: Int? = 0
 
     fun generateJwtToken(username: String): String {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(Date())
-                .setExpiration(Date((Date()).getTime() + jwtExpiration!! * 1000))
+                .setExpiration(Date((Date()).time + jwtExpiration!! * 1000))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact()
     }
@@ -52,6 +50,6 @@ class JwtProvider {
         return Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
-                .getBody().getSubject()
+                .body.subject
     }
 }

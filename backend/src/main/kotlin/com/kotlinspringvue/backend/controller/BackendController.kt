@@ -1,14 +1,12 @@
 package com.kotlinspringvue.backend.controller
 
 import com.kotlinspringvue.backend.jpa.User
-import com.kotlinspringvue.backend.model.Greeting
 import com.kotlinspringvue.backend.repository.PersonRepository
 import com.kotlinspringvue.backend.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
-import java.util.concurrent.atomic.AtomicLong
 
 @RestController
 @RequestMapping("/api")
