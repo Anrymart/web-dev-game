@@ -1,4 +1,4 @@
-package com.anrymart.webdev.web.response
+package com.anrymart.webdev.web
 
 import org.springframework.security.core.GrantedAuthority
 

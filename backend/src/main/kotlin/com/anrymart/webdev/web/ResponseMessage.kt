@@ -1,3 +1,3 @@
-package com.anrymart.webdev.web.response
+package com.anrymart.webdev.web
 
 class ResponseMessage(var message: String?)

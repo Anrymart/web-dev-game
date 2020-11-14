@@ -6,8 +6,8 @@ import com.anrymart.webdev.model.LoginUser
 import com.anrymart.webdev.model.NewUser
 import com.anrymart.webdev.repository.RoleRepository
 import com.anrymart.webdev.repository.UserRepository
-import com.anrymart.webdev.web.response.JwtResponse
-import com.anrymart.webdev.web.response.ResponseMessage
+import com.anrymart.webdev.web.JwtResponse
+import com.anrymart.webdev.web.ResponseMessage
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -25,7 +25,7 @@ import javax.validation.Valid
 @CrossOrigin(origins = ["*"], maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
-class AuthController() {
+class AuthController {
 
     @Autowired
     lateinit var authenticationManager: AuthenticationManager
@@ -51,9 +51,11 @@ class AuthController() {
             val user: User = userCandidate.get()
             val authentication = authenticationManager.authenticate(
                     UsernamePasswordAuthenticationToken(loginRequest.username, loginRequest.password))
-            SecurityContextHolder.getContext().setAuthentication(authentication)
+            SecurityContextHolder.getContext().authentication = authentication
             val jwt: String = jwtProvider.generateJwtToken(user.username!!)
-            val authorities: List<GrantedAuthority> = user.roles!!.stream().map({ role -> SimpleGrantedAuthority(role.name) }).collect(Collectors.toList<GrantedAuthority>())
+            val authorities: List<GrantedAuthority> = user.roles!!.stream()
+                    .map { role -> SimpleGrantedAuthority(role.name) }
+                    .collect(Collectors.toList<GrantedAuthority>())
             return ResponseEntity.ok(JwtResponse(jwt, user.username, authorities))
         } else {
             return ResponseEntity(ResponseMessage("User not found!"),

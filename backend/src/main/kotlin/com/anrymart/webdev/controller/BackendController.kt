@@ -16,7 +16,7 @@ class BackendController {
     lateinit var userRepository: UserRepository
 
     @GetMapping("/usercontent")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole({'USER', 'ADMIN'})")
     @ResponseBody
     fun getUserContent(authentication: Authentication): String {
         val user: User = userRepository.findByUsername(authentication.name).get()

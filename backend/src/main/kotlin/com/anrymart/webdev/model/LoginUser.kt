@@ -1,9 +1,8 @@
 package com.anrymart.webdev.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.io.Serializable
 
-class LoginUser : Serializable {
+class LoginUser {
 
     @JsonProperty("username")
     var username: String? = null
@@ -20,10 +19,5 @@ class LoginUser : Serializable {
         this.username = username
         this.password = password
         this.recaptchaToken = recaptchaToken
-    }
-
-    companion object {
-
-        private const val serialVersionUID = -1764970284520387975L
     }
 }

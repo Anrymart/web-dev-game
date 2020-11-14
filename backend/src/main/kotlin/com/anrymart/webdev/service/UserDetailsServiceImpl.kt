@@ -4,6 +4,7 @@ import com.anrymart.webdev.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -24,7 +25,7 @@ class UserDetailsServiceImpl : UserDetailsService {
                 .map { role -> SimpleGrantedAuthority(role.name) }
                 .collect(Collectors.toList<GrantedAuthority>())
 
-        return org.springframework.security.core.userdetails.User
+        return User
                 .withUsername(username)
                 .password(user.password)
                 .authorities(authorities)
